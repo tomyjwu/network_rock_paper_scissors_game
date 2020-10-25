@@ -51,8 +51,8 @@ def start_server():
     btnStop.config(state=tk.NORMAL)
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print socket.AF_INET
-    print socket.SOCK_STREAM
+    print (socket.AF_INET)
+    print (socket.SOCK_STREAM)
 
     server.bind((HOST_ADDR, HOST_PORT))
     server.listen(5)  # server is listening for client connection
