@@ -37,7 +37,7 @@ clientFrame.pack(side=tk.BOTTOM, pady=(5, 10))
 
 server = None
 HOST_ADDR = "0.0.0.0"
-HOST_PORT = 8080
+HOST_PORT = 9090
 client_name = " "
 clients = []
 clients_names = []
@@ -68,6 +68,7 @@ def stop_server():
     global server
     btnStart.config(state=tk.NORMAL)
     btnStop.config(state=tk.DISABLED)
+    server.close()
 
 
 def accept_clients(the_server, y):
@@ -87,11 +88,11 @@ def send_receive_client_message(client_connection, client_ip_addr):
     client_msg = " "
 
     # send welcome message to client
-    client_name = client_connection.recv(4096)
+    client_name = client_connection.recv(4096).decode()
     if len(clients) < 2:
-        client_connection.send("welcome1")
+        client_connection.send(b"welcome1")
     else:
-        client_connection.send("welcome2")
+        client_connection.send(b"welcome2")
 
     clients_names.append(client_name)
     update_client_names_display(clients_names)  # update client names display
@@ -105,7 +106,7 @@ def send_receive_client_message(client_connection, client_ip_addr):
         # go to sleep
 
     while True:
-        data = client_connection.recv(4096)
+        data = client_connection.recv(4096).decode()
         if not data: break
 
         # get the player choice from received data

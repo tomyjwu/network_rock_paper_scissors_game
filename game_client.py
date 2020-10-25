@@ -22,7 +22,7 @@ opponent_score = 0
 # network client
 client = None
 HOST_ADDR = "0.0.0.0"
-HOST_PORT = 8080
+HOST_PORT = 9090
 
 
 top_welcome_frame= tk.Frame(window_main)
@@ -183,7 +183,7 @@ def connect_to_server(name):
     try:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((HOST_ADDR, HOST_PORT))
-        client.send(name) # Send name to server after connecting
+        client.send(name.encode()) # Send name to server after connecting
 
         # disable widgets
         btn_connect.config(state=tk.DISABLED)
