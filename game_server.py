@@ -9,9 +9,10 @@ window.title("Sever")
 
 # Top frame consisting of two buttons widgets (i.e. btnStart, btnStop)
 topFrame = tk.Frame(window)
-btnStart = tk.Button(topFrame, text="Start", command=lambda : start_server())
+btnStart = tk.Button(topFrame, text="Start", foreground="grey", command=lambda : start_server())
 btnStart.pack(side=tk.LEFT)
-btnStop = tk.Button(topFrame, text="Stop", command=lambda : stop_server(), state=tk.DISABLED)
+btnStart.configure(fg="grey")
+btnStop = tk.Button(topFrame, text="Stop", foreground="grey", command=lambda : stop_server(), state=tk.DISABLED)
 btnStop.pack(side=tk.LEFT)
 topFrame.pack(side=tk.TOP, pady=(5, 0))
 
@@ -101,8 +102,10 @@ def send_receive_client_message(client_connection, client_ip_addr):
         sleep(1)
 
         # send opponent name
-        clients[0].send("opponent_name$" + clients_names[1])
-        clients[1].send("opponent_name$" + clients_names[0])
+        opponent_name = "opponent_name$" + clients_names[1]
+        clients[0].send(opponent_name.encode())
+        opponent_name = "opponent_name$" + clients_names[0]
+        clients[1].send(opponent_name.encode())
         # go to sleep
 
     while True:
@@ -122,8 +125,10 @@ def send_receive_client_message(client_connection, client_ip_addr):
 
         if len(player_data) == 2:
             # send player 1 choice to player 2 and vice versa
-            player_data[0].get("socket").send("$opponent_choice" + player_data[1].get("choice"))
-            player_data[1].get("socket").send("$opponent_choice" + player_data[0].get("choice"))
+            opponent_choice = "$opponent_choice" + player_data[1].get("choice")
+            player_data[0].get("socket").send(opponent_choice.encode())
+            opponent_choice = "$opponent_choice" + player_data[0].get("choice")
+            player_data[1].get("socket").send(opponent_choice.encode())
 
             player_data = []
 

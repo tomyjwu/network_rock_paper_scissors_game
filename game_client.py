@@ -15,7 +15,7 @@ game_round = 0
 game_timer = 4
 your_choice = ""
 opponent_choice = ""
-TOTAL_NO_OF_ROUNDS = 5
+TOTAL_NO_OF_ROUNDS = 3
 your_score = 0
 opponent_score = 0
 
@@ -174,7 +174,8 @@ def choice(arg):
     lbl_your_choice["text"] = "Your choice: " + your_choice
 
     if client:
-        client.send("Game_Round"+str(game_round)+your_choice)
+        str_data = "Game_Round"+str(game_round)+your_choice
+        client.send(str_data.encode())
         enable_disable_buttons("disable")
 
 
@@ -203,7 +204,7 @@ def receive_message_from_server(sck, m):
     global your_choice, opponent_choice, your_score, opponent_score
 
     while True:
-        from_server = sck.recv(4096)
+        from_server = sck.recv(4096).decode()
 
         if not from_server: break
 
