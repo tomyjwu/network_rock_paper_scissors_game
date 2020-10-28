@@ -37,7 +37,7 @@ clientFrame.pack(side=tk.BOTTOM, pady=(5, 10))
 
 
 server = None
-HOST_ADDR = "0.0.0.0"
+HOST_ADDR = "127.0.0.1"
 HOST_PORT = 9090
 client_name = " "
 clients = []
