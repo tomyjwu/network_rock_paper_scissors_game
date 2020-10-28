@@ -3,8 +3,9 @@ This repository contains complete source codes for a network rock-paper-scissors
 
 To run the application:
 
-1. Make sure you have python installed and setup on your system. App is tested on Python 2.7
-2. Download or clone the repository
+1. Make sure you have python installed and setup on your system. App is tested on Python 3.x
+2. Download or clone the repository. 
+    Recommended virtual env setup `python3 -m venv venv` and `source venv/bin/activate`
 3. To start the server: python game_server.py
 4. Click "Start" button on the Server window
 5. Lauch two clients. To start a client: python game_client.py
