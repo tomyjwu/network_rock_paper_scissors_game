@@ -37,12 +37,15 @@ clientFrame.pack(side=tk.BOTTOM, pady=(5, 10))
 
 
 server = None
-HOST_ADDR = "0.0.0.0"
+
+HOST_ADDR = "127.0.0.1"
 HOST_PORT = 9090
+
 client_name = " "
 clients = []
 clients_names = []
 player_data = []
+num_players = 3
 
 
 # Start server function
@@ -74,7 +77,7 @@ def stop_server():
 
 def accept_clients(the_server, y):
     while True:
-        if len(clients) < 2:
+        if len(clients) < num_players:
             client, addr = the_server.accept()
             clients.append(client)
 
@@ -88,24 +91,33 @@ def send_receive_client_message(client_connection, client_ip_addr):
 
     client_msg = " "
 
-    # send welcome message to client
+    # send welcome message to client 
+
     client_name = client_connection.recv(4096).decode()
-    if len(clients) < 2:
+    if len(clients) == 1:
         client_connection.send(b"welcome1")
-    else:
+    elif len(clients) == 2:
         client_connection.send(b"welcome2")
+    elif len(clients) == 3:
+        client_connection.send(b"welcome3")
+
 
     clients_names.append(client_name)
     update_client_names_display(clients_names)  # update client names display
 
-    if len(clients) > 1:
+    if len(clients) >= num_players:
         sleep(1)
 
         # send opponent name
-        opponent_name = "opponent_name$" + clients_names[1]
+
+        opponent_name = "opponent_name$" + clients_names[1] + " and " + clients_names[2]
         clients[0].send(opponent_name.encode())
-        opponent_name = "opponent_name$" + clients_names[0]
+        opponent_name = "opponent_name$" + clients_names[0] + " and " + clients_names[2]
         clients[1].send(opponent_name.encode())
+        opponent_name = "opponent_name$" + clients_names[0] + " and " + clients_names[1]
+        clients[2].send(opponent_name.encode())
+
+
         # go to sleep
 
     while True:
@@ -120,14 +132,18 @@ def send_receive_client_message(client_connection, client_ip_addr):
             "socket": client_connection
         }
 
-        if len(player_data) < 2:
+        if len(player_data) < num_players:
             player_data.append(msg)
 
-        if len(player_data) == 2:
+        if len(player_data) == num_players:
             # send player 1 choice to player 2 and vice versa
-            opponent_choice = "$opponent_choice" + player_data[1].get("choice")
+            opponent_choice = "1:" + player_data[1].get("choice") + "2:" + player_data[2].get("choice")
             player_data[0].get("socket").send(opponent_choice.encode())
-            opponent_choice = "$opponent_choice" + player_data[0].get("choice")
+
+            opponent_choice = "0:" + player_data[0].get("choice") + "2:" + player_data[2].get("choice")
+            player_data[1].get("socket").send(opponent_choice.encode())
+
+            opponent_choice = "0:" + player_data[0].get("choice") + "1:" + player_data[1].get("choice")
             player_data[1].get("socket").send(opponent_choice.encode())
 
             player_data = []
