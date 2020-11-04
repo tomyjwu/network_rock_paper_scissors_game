@@ -148,10 +148,6 @@ def send_receive_client_message(client_connection, client_ip_addr):
 
         if len(player_data) == num_players:
             # send player 1 choice to player 2 and vice versa
-<<<<<<< Updated upstream
-            player_data[0].get("socket").send("$opponent_choice" + player_data[1].get("choice"))
-            player_data[1].get("socket").send("$opponent_choice" + player_data[0].get("choice"))
-=======
             opponent_choice = "1:" + player_data[1].get("choice") + "2:" + player_data[2].get("choice")
             player_data[0].get("socket").send(opponent_choice.encode())
 
@@ -160,7 +156,6 @@ def send_receive_client_message(client_connection, client_ip_addr):
 
             opponent_choice = "0:" + player_data[0].get("choice") + "1:" + player_data[1].get("choice")
             player_data[1].get("socket").send(opponent_choice.encode())
->>>>>>> Stashed changes
 
             player_data = []
 
