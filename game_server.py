@@ -9,9 +9,10 @@ window.title("Sever")
 
 # Top frame consisting of two buttons widgets (i.e. btnStart, btnStop)
 topFrame = tk.Frame(window)
-btnStart = tk.Button(topFrame, text="Start", command=lambda : start_server())
+btnStart = tk.Button(topFrame, text="Start", foreground="grey", command=lambda : start_server())
 btnStart.pack(side=tk.LEFT)
-btnStop = tk.Button(topFrame, text="Stop", command=lambda : stop_server(), state=tk.DISABLED)
+btnStart.configure(fg="grey")
+btnStop = tk.Button(topFrame, text="Stop", foreground="grey", command=lambda : stop_server(), state=tk.DISABLED)
 btnStop.pack(side=tk.LEFT)
 topFrame.pack(side=tk.TOP, pady=(5, 0))
 
@@ -36,13 +37,10 @@ clientFrame.pack(side=tk.BOTTOM, pady=(5, 10))
 
 
 server = None
-<<<<<<< Updated upstream
-HOST_ADDR = "0.0.0.0"
-HOST_PORT = 8080
-=======
+
 HOST_ADDR = "127.0.0.1"
 HOST_PORT = 9090
->>>>>>> Stashed changes
+
 client_name = " "
 clients = []
 clients_names = []
@@ -57,8 +55,8 @@ def start_server():
     btnStop.config(state=tk.NORMAL)
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print socket.AF_INET
-    print socket.SOCK_STREAM
+    print (socket.AF_INET)
+    print (socket.SOCK_STREAM)
 
     server.bind((HOST_ADDR, HOST_PORT))
     server.listen(5)  # server is listening for client connection
@@ -74,6 +72,7 @@ def stop_server():
     global server
     btnStart.config(state=tk.NORMAL)
     btnStop.config(state=tk.DISABLED)
+    server.close()
 
 
 def accept_clients(the_server, y):
@@ -92,14 +91,8 @@ def send_receive_client_message(client_connection, client_ip_addr):
 
     client_msg = " "
 
-    # send welcome message to client
-<<<<<<< Updated upstream
-    client_name = client_connection.recv(4096)
-    if len(clients) < 2:
-        client_connection.send("welcome1")
-    else:
-        client_connection.send("welcome2")
-=======
+    # send welcome message to client 
+
     client_name = client_connection.recv(4096).decode()
     if len(clients) == 1:
         client_connection.send(b"welcome1")
@@ -108,7 +101,6 @@ def send_receive_client_message(client_connection, client_ip_addr):
     elif len(clients) == 3:
         client_connection.send(b"welcome3")
 
->>>>>>> Stashed changes
 
     clients_names.append(client_name)
     update_client_names_display(clients_names)  # update client names display
@@ -117,10 +109,7 @@ def send_receive_client_message(client_connection, client_ip_addr):
         sleep(1)
 
         # send opponent name
-<<<<<<< Updated upstream
-        clients[0].send("opponent_name$" + clients_names[1])
-        clients[1].send("opponent_name$" + clients_names[0])
-=======
+
         opponent_name = "opponent_name$" + clients_names[1] + " and " + clients_names[2]
         clients[0].send(opponent_name.encode())
         opponent_name = "opponent_name$" + clients_names[0] + " and " + clients_names[2]
@@ -128,11 +117,11 @@ def send_receive_client_message(client_connection, client_ip_addr):
         opponent_name = "opponent_name$" + clients_names[0] + " and " + clients_names[1]
         clients[2].send(opponent_name.encode())
 
->>>>>>> Stashed changes
+
         # go to sleep
 
     while True:
-        data = client_connection.recv(4096)
+        data = client_connection.recv(4096).decode()
         if not data: break
 
         # get the player choice from received data

@@ -15,19 +15,15 @@ game_round = 0
 game_timer = 4
 your_choice = ""
 opponent_choice = ""
-TOTAL_NO_OF_ROUNDS = 5
+TOTAL_NO_OF_ROUNDS = 3
 your_score = 0
 opponent_score = 0
 
 # network client
 client = None
-<<<<<<< Updated upstream
-HOST_ADDR = "0.0.0.0"
-HOST_PORT = 8080
-=======
+
 HOST_ADDR = "127.0.0.1"
 HOST_PORT = 9090
->>>>>>> Stashed changes
 
 
 top_welcome_frame= tk.Frame(window_main)
@@ -180,7 +176,8 @@ def choice(arg):
     lbl_your_choice["text"] = "Your choice: " + your_choice
 
     if client:
-        client.send("Game_Round"+str(game_round)+your_choice)
+        str_data = "Game_Round"+str(game_round)+your_choice
+        client.send(str_data.encode())
         enable_disable_buttons("disable")
 
 
@@ -189,7 +186,7 @@ def connect_to_server(name):
     try:
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((HOST_ADDR, HOST_PORT))
-        client.send(name) # Send name to server after connecting
+        client.send(name.encode()) # Send name to server after connecting
 
         # disable widgets
         btn_connect.config(state=tk.DISABLED)
@@ -209,7 +206,7 @@ def receive_message_from_server(sck, m):
     global your_choice, opponent_choice, your_score, opponent_score
 
     while True:
-        from_server = sck.recv(4096)
+        from_server = sck.recv(4096).decode()
 
         if not from_server: break
 
